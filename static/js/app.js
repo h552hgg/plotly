@@ -39,5 +39,22 @@ d3.json("samples.json").then((importedData) => {
     };
 
 
+
+
     Plotly.newPlot("bar", chartData, layout);
+
+
+    var trace2 = {
+        x: sample940.otu_ids.map(id => ` ${id}`),
+        y: sample940.sample_values.slice(0, 10),
+        mode: 'markers',
+
+
+    };
+
+    var dataChart = [trace2]
+
+
+    Plotly.newPlot("bubble", dataChart);
+
 });
