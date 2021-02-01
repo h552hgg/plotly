@@ -4,6 +4,7 @@
 
 
 d3.json("samples.json").then((importedData) => {
+    ///variables for different sections of the json file 
     data = importedData.samples
     dataid = importedData.metadata
     // console.log(dataid)
@@ -21,39 +22,58 @@ d3.json("samples.json").then((importedData) => {
     });
 
 
-    console.log(dataid[0].wfreq)
 
+
+
+    ///use for the guage as temp///
     var freq = dataid[0].wfreq
-    ///////////
+    console.log(freq)
+
+
+    ///////////Change from user/////
     d3.selectAll("#selDataset").on("change", optionChanged);
     function optionChanged() {
         var dropdownMenu = d3.select("#selDataset");
 
         var inputValue = dropdownMenu.property("value");
 
-        // console.log(inputValue);
+        console.log(inputValue);
+        demoBar(inputValue);
 
-    }
+    };
+
+
+
 
 
 
 
 
     ////////Demographic Info//////////
+    function demoBar(id_val) {
+        console.log(id_val)
+        const subjectId = parseInt(id_val)
 
-    var sample = dataid.filter(x => x.id === 940)[0];
-    // console.log(sample)
 
-    panel = d3.select(".panel-body")
-    panel.html("")
-    Object.entries(sample).forEach(([key, value]) => {
-        panel.append("p").text(`${key}: ${value}`)
-    });
+        const sample = dataid.filter(x => x.id === subjectId)[0];
+        // console.log(sample)
 
+        panel = d3.select(".panel-body")
+        panel.html("")
+        Object.entries(sample).forEach(([key, value]) => {
+            panel.append("p").text(`${key}: ${value}`)
+        });
+
+    }
+
+
+    /////Sorting for bar chart 
     var sortedValues = data.sort((a, b) => b.sample_values - a.sample_values);
     // console.log(sortedValues)
 
     var sample940 = sortedValues.filter(obj => obj.id === `940`)[0];
+
+
 
     var trace1 = {
         x: sample940.sample_values.slice(0, 10).reverse(),
@@ -80,6 +100,7 @@ d3.json("samples.json").then((importedData) => {
 
     Plotly.newPlot("bar", chartData, layout);
 
+
     ////////Bubble Chart//////////
     var trace2 = {
         x: sample940.otu_ids.map(id => ` ${id}`),
@@ -105,7 +126,7 @@ d3.json("samples.json").then((importedData) => {
 
 
 
-    /////////gauge
+    /////////Gauge Chart added///////////
 
     var data = [
         {
