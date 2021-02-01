@@ -17,7 +17,13 @@ d3.json("samples.json").then((importedData) => {
 
     Object.entries(datanames).forEach(([key, value]) => {
         id_list.insert("option").text(value)
+
     });
+
+
+    console.log(dataid[0].wfreq)
+
+    var freq = dataid[0].wfreq
     ///////////
     d3.selectAll("#selDataset").on("change", optionChanged);
     function optionChanged() {
@@ -25,18 +31,9 @@ d3.json("samples.json").then((importedData) => {
 
         var inputValue = dropdownMenu.property("value");
 
-        console.log(inputValue);
+        // console.log(inputValue);
 
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -104,5 +101,35 @@ d3.json("samples.json").then((importedData) => {
 
 
     Plotly.newPlot("bubble", dataChart);
+
+
+
+
+    /////////gauge
+
+    var data = [
+        {
+
+            value: freq,
+            title: { text: "Belly Button Washing per week" },
+            colorscale: 'Greens',
+            type: "indicator",
+            mode: "gauge+number",
+            delta: { reference: 0 },
+
+            gauge: {
+                axis: { range: [null, 9] },
+                steps: [
+                    { range: [0, 9] }
+                ],
+
+
+            }
+        }
+    ];
+
+    var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+    Plotly.newPlot('gauge', data, layout);
+
 
 });
