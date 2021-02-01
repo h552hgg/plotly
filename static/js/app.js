@@ -4,70 +4,48 @@
 
 
 d3.json("samples.json").then((importedData) => {
-    // console.log(importedData)
-    // var names = Object.values(importedData.names);
-    // ///////////////////////
-    // console.log(names)
-    // d3.selectAll("#selDataset").on("change", optionChanged);
-
-    // // function updatePlotly(newdata){
-    // //     var id =document.getElementById("sample-metadata");
-    // //     Plotly.restyle(id,"values",[newdata]);
-    // // }
-    // function optionChanged(dataset) {
-    //     for (var i = 0; i < names.length; i++);
-    //     var dataset = names[i];
-    //     // updatePlotly(data)
-
-    // }
-
-
-
-
-
-
-
-
-    //////////////////////////////////////
-
-
-
-
     data = importedData.samples
     dataid = importedData.metadata
     // console.log(dataid)
+    datanames = importedData.names
+    console.log(datanames)
+
+
+
+    ///Drop Down Filled with values from names 
+    var id_list = d3.select("#selDataset");
+
+    Object.entries(datanames).forEach(([key, value]) => {
+        id_list.insert("option").text(value)
+    });
+
+
+    function optionChanged(value) {
+        var dataset = d3.select("#selDataset");
+        id_main = value;
+        console.log(id_main)
+
+    }
+
+
+
+
+
+
+
+
+
+
+    ////////Demographic Info//////////
+
     var sample = dataid.filter(x => x.id === 940)[0];
     console.log(sample)
-    var age = sample.age
-    var bbtypes = sample.bbtypes
-    var ethnicity = sample.ethnicity
-    var gender = sample.gender
-    var id = sample.id
-    var location = sample.location
-    var wfreq = sample.wfreq
 
-
-    function buildTable(age, bbtypes, ethnicity, gender, id, location, wfreq) {
-
-
-
-        var table = d3.select("#sample-metadata");
-        var tbody = table.select("p")
-        var trow;
-
-
-        trow = tbody.append("p");
-        trow.append("p").text(age);
-        trow.append("p").text(bbtypes);
-        trow.append("p").text(ethnicity);
-        trow.append("p").text(gender);
-        trow.append("p").text(id);
-        trow.append("p").text(location);
-        trow.append("p").text(wfreq);
-
-    };
-
-
+    panel = d3.select(".panel-body")
+    panel.html("")
+    Object.entries(sample).forEach(([key, value]) => {
+        panel.append("p").text(`${key}: ${value}`)
+    });
 
     var sortedValues = data.sort((a, b) => b.sample_values - a.sample_values);
     // console.log(sortedValues)
@@ -83,7 +61,7 @@ d3.json("samples.json").then((importedData) => {
         orientation: "h"
     };
 
-
+    ////////Bar Chart///////////
     var chartData = [trace1];
 
 
@@ -97,12 +75,9 @@ d3.json("samples.json").then((importedData) => {
         }
     };
 
-
-
-
     Plotly.newPlot("bar", chartData, layout);
 
-
+    ////////Bubble Chart//////////
     var trace2 = {
         x: sample940.otu_ids.map(id => ` ${id}`),
         y: sample940.sample_values.slice(0, 10),
