@@ -34,16 +34,45 @@ d3.json("samples.json").then((importedData) => {
 
 
     data = importedData.samples
-    // console.log(data)
+    dataid = importedData.metadata
+    // console.log(dataid)
+    var sample = dataid.filter(x => x.id === 940)[0];
+    console.log(sample)
+    var age = sample.age
+    var bbtypes = sample.bbtypes
+    var ethnicity = sample.ethnicity
+    var gender = sample.gender
+    var id = sample.id
+    var location = sample.location
+    var wfreq = sample.wfreq
+
+
+    function buildTable(age, bbtypes, ethnicity, gender, id, location, wfreq) {
+
+
+
+        var table = d3.select("#sample-metadata");
+        var tbody = table.select("p")
+        var trow;
+
+
+        trow = tbody.append("p");
+        trow.append("p").text(age);
+        trow.append("p").text(bbtypes);
+        trow.append("p").text(ethnicity);
+        trow.append("p").text(gender);
+        trow.append("p").text(id);
+        trow.append("p").text(location);
+        trow.append("p").text(wfreq);
+
+    };
+
 
 
     var sortedValues = data.sort((a, b) => b.sample_values - a.sample_values);
     // console.log(sortedValues)
 
     var sample940 = sortedValues.filter(obj => obj.id === `940`)[0];
-
-
-
 
     var trace1 = {
         x: sample940.sample_values.slice(0, 10).reverse(),
