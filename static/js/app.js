@@ -8,7 +8,7 @@ d3.json("samples.json").then((importedData) => {
     dataid = importedData.metadata
     // console.log(dataid)
     datanames = importedData.names
-    console.log(datanames)
+    // console.log(datanames)
 
 
 
@@ -18,14 +18,20 @@ d3.json("samples.json").then((importedData) => {
     Object.entries(datanames).forEach(([key, value]) => {
         id_list.insert("option").text(value)
     });
+    ///////////
+    d3.selectAll("#selDataset").on("change", optionChanged);
+    function optionChanged() {
+        var dropdownMenu = d3.select("#selDataset");
 
+        var inputValue = dropdownMenu.property("value");
 
-    function optionChanged(value) {
-        var dataset = d3.select("#selDataset");
-        id_main = value;
-        console.log(id_main)
+        console.log(inputValue);
 
     }
+
+
+
+
 
 
 
@@ -39,7 +45,7 @@ d3.json("samples.json").then((importedData) => {
     ////////Demographic Info//////////
 
     var sample = dataid.filter(x => x.id === 940)[0];
-    console.log(sample)
+    // console.log(sample)
 
     panel = d3.select(".panel-body")
     panel.html("")
