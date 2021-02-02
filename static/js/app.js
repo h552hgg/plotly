@@ -1,5 +1,5 @@
 
-
+//Select the onchange function from HTML
 d3.selectAll("#selDataset").on("change", optionChanged);
 function optionChanged(id) {
     // console.log(id)
@@ -8,11 +8,12 @@ function optionChanged(id) {
     var inputValue = dropdownMenu.property("value");
 
     // console.log(inputValue);
+    // Update bar function and passing input value
     demoBar(inputValue)
 
 }
-///Drop Down Filled with values from names 
 
+///Drop Down Filled with values from names 
 d3.json("samples.json").then((importedData) => {
     datanames = importedData.names
 
@@ -31,31 +32,36 @@ d3.json("samples.json").then((importedData) => {
 function demoBar(id_val) {
     d3.json("samples.json").then((data) => {
 
+        //using D3 bring in metadata
         dataid = data.metadata
+
+        // using the value return from input, select matching id
         const subjectId = parseInt(id_val)
+
         const guageId = dataid.filter(x => x.id === subjectId)[0];
         // console.log(guageId)
+
+        // create a variable to read in the wfreq to use for guage chart
         const freq = guageId.wfreq;
         // console.log(freq)
 
 
         const sample = dataid.filter(x => x.id === subjectId)[0];
-
         // console.log(sample)
 
+        // Fill in Demo chart with key and value 
         panel = d3.select(".panel-body")
         panel.html("")
         let demoFill = Object.entries(sample).forEach(([key, value]) => {
             panel.append("p").text(`${key}: ${value}`)
         });
-        /////////Gauge Chart added///////////
 
+        /////////Gauge Chart added///////////
         var data = [
             {
-
+                // Use the freq variable display wfreq
                 value: freq,
                 title: { text: "Belly Button Washing per week" },
-                colorscale: 'Greens',
                 type: "indicator",
                 mode: "gauge+number",
                 delta: { reference: 0 },
@@ -70,10 +76,11 @@ function demoBar(id_val) {
                 }
             }
         ];
-
+        // Display graph 
         var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
         Plotly.newPlot('gauge', data, layout);
 
+        // Update barGraph function with id_val
         barGraph(id_val);
 
 
@@ -84,22 +91,18 @@ function demoBar(id_val) {
 function barGraph(id) {
     d3.json("samples.json").then((data) => {
 
-        datasort = data.samples
+        //Create variables using D3
+        datasort = data.samples;
+        datanames = data.names;
 
-
-        datanames = data.names
-        // console.log(id)
-        // var subject = parseInt(id)
-        // console.log(subject)
-
-
+        /// Use sort and filter then match with input from previous function
         var sortedValues = datasort.sort((a, b) => b.sample_values - a.sample_values);
         var sample940 = sortedValues.filter(obj => obj.id === id)[0];
 
 
 
 
-
+        //Create trace
         var trace1 = {
             x: sample940.sample_values.slice(0, 10).reverse(),
             y: sample940.otu_ids.map(id => `OTU ${id}`).slice(0, 10).reverse(),
@@ -122,11 +125,11 @@ function barGraph(id) {
                 b: 100
             }
         };
-
+        //Display graph 
         Plotly.newPlot("bar", chartData, layout);
 
 
-
+        //Create 2nd trace for bubble graph
         var trace2 = {
             x: sample940.otu_ids.map(id => ` ${id}`),
             y: sample940.sample_values.slice(0, 10),
@@ -145,32 +148,23 @@ function barGraph(id) {
 
         var dataChart = [trace2]
 
-
+        // Display graph
         Plotly.newPlot("bubble", dataChart)
     });
 };
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-////Preload graph////////
-
-
-
-
-
-
-
+////Preload graph--- Avoid users seeing a blank page at intial deployment
 
 d3.json("samples.json").then((data) => {
 
-    datasort = data.samples
+    datasort = data.samples;
 
 
-    datanames = data.names
-    // console.log(id)
-    // var subject = parseInt(id)
-    // console.log(subject)
-    dataid = data.metadata
+    datanames = data.names;
+
+    dataid = data.metadata;
     var sample = dataid.filter(x => x.id === 940)[0];
 
 
@@ -184,14 +178,6 @@ d3.json("samples.json").then((data) => {
 
     var sortedValues = datasort.sort((a, b) => b.sample_values - a.sample_values);
     var sample940 = sortedValues.filter(obj => obj.id === `940`)[0];
-    // console.log(sample940)
-
-    // var dataSearch = dataid
-    // var freq = dataSearch
-    // console.log(freq)
-
-
-
 
 
     var trace1 = {
