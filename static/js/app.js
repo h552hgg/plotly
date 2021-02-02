@@ -33,6 +33,10 @@ function demoBar(id_val) {
 
         dataid = data.metadata
         const subjectId = parseInt(id_val)
+        const guageId = dataid.filter(x => x.id === subjectId)[0];
+        // console.log(guageId)
+        const freq = guageId.wfreq;
+        // console.log(freq)
 
 
         const sample = dataid.filter(x => x.id === subjectId)[0];
@@ -43,13 +47,32 @@ function demoBar(id_val) {
         panel.html("")
         let demoFill = Object.entries(sample).forEach(([key, value]) => {
             panel.append("p").text(`${key}: ${value}`)
-            // // console.log(key, value)
-
-            // if (key === "wfreq")
-            //     return value;
-            // console.log(value)
-
         });
+        /////////Gauge Chart added///////////
+
+        var data = [
+            {
+
+                value: freq,
+                title: { text: "Belly Button Washing per week" },
+                colorscale: 'Greens',
+                type: "indicator",
+                mode: "gauge+number",
+                delta: { reference: 0 },
+
+                gauge: {
+                    axis: { range: [null, 9] },
+                    steps: [
+                        { range: [0, 9] }
+                    ],
+
+
+                }
+            }
+        ];
+
+        var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+        Plotly.newPlot('gauge', data, layout);
 
         barGraph(id_val);
 
@@ -123,35 +146,9 @@ function barGraph(id) {
         var dataChart = [trace2]
 
 
-        Plotly.newPlot("bubble", dataChart);
-
-        //     /////////Gauge Chart added///////////
-
-        //     var data = [
-        //         {
-
-        //             value: freq,
-        //             title: { text: "Belly Button Washing per week" },
-        //             colorscale: 'Greens',
-        //             type: "indicator",
-        //             mode: "gauge+number",
-        //             delta: { reference: 0 },
-
-        //             gauge: {
-        //                 axis: { range: [null, 9] },
-        //                 steps: [
-        //                     { range: [0, 9] }
-        //                 ],
-
-
-        //             }
-        //         }
-        //     ];
-
-        //     var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
-        //     Plotly.newPlot('gauge', data, layout);
+        Plotly.newPlot("bubble", dataChart)
     });
-}
+};
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,4 +241,28 @@ d3.json("samples.json").then((data) => {
 
 
     Plotly.newPlot("bubble", dataChart);
+    var data = [
+        {
+
+            value: 2,
+            title: { text: "Belly Button Washing per week" },
+            colorscale: 'Greens',
+            type: "indicator",
+            mode: "gauge+number",
+            delta: { reference: 0 },
+
+            gauge: {
+                axis: { range: [null, 9] },
+                steps: [
+                    { range: [0, 9] }
+                ],
+
+
+            }
+        }
+    ];
+
+    var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+    Plotly.newPlot('gauge', data, layout);
+
 });
